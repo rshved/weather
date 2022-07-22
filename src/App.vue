@@ -24,6 +24,7 @@
 <script>
 import { getWeatherInfoInTheCity } from "@/api";
 import { getItemFromLocalStorage, saveItemToLocalStorage } from "@/localStorageHelpers";
+import { getSearchParams, pushHistoryState } from "@/urlHelpers";
 import CityCard from "@/components/CityCard";
 
 export default {
@@ -47,9 +48,7 @@ export default {
   }),
 
   async mounted() {
-    const windowData = Object.fromEntries(
-        new URL(window.location).searchParams.entries()
-    );
+    const windowData = getSearchParams()
 
     if (windowData.page) {
       this.page = +windowData.page
@@ -92,11 +91,7 @@ export default {
       this.latitude= ''
     },
     page(v) {
-      window.history.pushState(
-          null,
-          document.title,
-          `${window.location.pathname}?page=${v}`
-      );
+      pushHistoryState(v)
     }
   },
   methods: {
